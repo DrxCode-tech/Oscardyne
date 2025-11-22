@@ -466,7 +466,7 @@ function Careers() {
         formData.append("file", e.target[3].files[0]);
       }
 
-      const response = await fetch("/server/careers", {
+      const response = await fetch("/api/career", {
         method: "POST",
         body: formData,
       });
