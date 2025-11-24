@@ -60,7 +60,7 @@ function Nav({ onOpen }) {
           </nav>
 
           <div className="flex items-center gap-3">
-            <a href="#contact" className="hidden md:inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-yellow-500 text-black font-semibold">Request Quote</a>
+            <a href="#contact" className="hidden md:inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-yellow-500 text-black font-semibold">Emergency Service</a>
 
             {/* hidden on md+ because we show full nav there */}
             <button onClick={onOpen} className="p-2 rounded-md bg-white/6 backdrop-blur-sm hover:scale-105 transition md:hidden">
@@ -123,7 +123,7 @@ function MobileMenu({ open, onClose }) {
             ))}
 
             <motion.a href="#contact" onClick={onClose} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ delay: 0.2 }} className="mt-6 inline-block text-center px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-yellow-500 text-black font-bold shadow-[0_0_25px_rgba(255,255,255,0.15)]">
-              Request Quote
+              Emergency Service
             </motion.a>
           </nav>
         </motion.div>
@@ -185,7 +185,7 @@ function ParallaxHero() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-          Oscardyne Security Logistics
+          Oscardyne Fitness and Security Logistics
         </motion.h1>
 
         <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} className="mt-6 text-gray-300 max-w-2xl mx-auto">
@@ -527,7 +527,7 @@ function AIChat() {
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`px-5 py-4 rounded-2xl text-sm max-w-[75%] break-words leading-relaxed ${msg.from === "user"
+            className={`px-5 py-4 rounded-2xl text-sm max-w-[75%] md:max-w-[90%] break-words leading-relaxed ${msg.from === "user"
               ? "bg-blue-600/30 text-white self-end"
               : "bg-white/10 text-gray-200 self-start"
               }`}
@@ -621,7 +621,7 @@ export default function OscardyneApp() {
 
       {/* Floating CTA */}
       <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50">
-        <motion.a whileHover={{ scale: 1.05 }} href="#contact" className="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-blue-600 to-yellow-400 text-black font-bold shadow-2xl">Request Quote</motion.a>
+        <motion.a whileHover={{ scale: 1.05 }} href="#contact" className="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-blue-600 to-yellow-400 text-black font-bold shadow-2xl">Emergency Service</motion.a>
       </div>
     </div>
   );
