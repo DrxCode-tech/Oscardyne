@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone, Mail, MapPin, Send, Loader2, Home, Bot, PlayCircle, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
+import { db, storage } from "./firebaseConfig";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 // Assets (ensure these exist in /src/assets)
 import HeroImg from "./assets/Security1.jpg";
@@ -332,27 +335,31 @@ function Careers() {
     setMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("email", form.email);
-      formData.append("phone", form.phone);
-      if (selectedFile && selectedFile.file) formData.append("file", selectedFile.file);
+      let fileURL = null;
 
-      // NOTE: Your serverless endpoint path may vary. This assumes /api/career
-      const response = await fetch("/api/career", {
-        method: "POST",
-        body: formData,
+      // Upload file if selected
+      if (selectedFile && selectedFile.file) {
+        const storageRef = ref(
+          storage,
+          `applications/${Date.now()}-${selectedFile.file.name}`
+        );
+
+        await uploadBytes(storageRef, selectedFile.file);
+        fileURL = await getDownloadURL(storageRef);
+      }
+
+      // Store data in Firestore
+      await addDoc(collection(db, "job_applications"), {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        fileURL: fileURL,
+        createdAt: Timestamp.now()
       });
 
-      const result = await response.json().catch(() => ({}));
-
-      if (response.ok) {
-        setMessage("Application submitted successfully!");
-        setForm({ name: "", email: "", phone: "" });
-        setSelectedFile(null);
-      } else {
-        setMessage(result.error || "Something went wrong.");
-      }
+      setMessage("Application submitted successfully!");
+      setForm({ name: "", email: "", phone: "" });
+      setSelectedFile(null);
     } catch (error) {
       console.error(error);
       setMessage("Error submitting application.");
@@ -360,6 +367,7 @@ function Careers() {
       setLoading(false);
     }
   };
+
 
   return (
     <section id="careers" className="py-20 bg-black/70 relative min-h-screen">
