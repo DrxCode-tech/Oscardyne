@@ -485,24 +485,25 @@ function AIChat() {
       const aiText = data.reply;
 
       // Add AI message placeholder
-      setMessages((prev) => [...prev, { text: "", from: "ai" }]);
+      setMessages((prev) => {
+        return [...prev, { text: "", from: "ai" }];
+      });
 
-      let index = 0;
+      // Capture index of the new AI message
+      let aiIndex = messages.length; // messages.length before adding new AI message
+
+      let charIndex = 0;
 
       const typeAI = () => {
         setMessages((prev) => {
           const newMessages = [...prev];
-          // Find the last AI message
-          const lastAIIndex = newMessages.map(m => m.from).lastIndexOf("ai");
-          if (lastAIIndex !== -1) {
-            newMessages[lastAIIndex].text += aiText[index];
-          }
+          newMessages[aiIndex].text += aiText[charIndex];
           return newMessages;
         });
 
-        index++;
-        if (index < aiText.length) {
-          setTimeout(typeAI, 20); // adjust typing speed here
+        charIndex++;
+        if (charIndex < aiText.length) {
+          setTimeout(typeAI, 20); // speed
         }
       };
 
@@ -517,6 +518,7 @@ function AIChat() {
 
 
 
+
   return (
     <div className="w-full max-w-3xl mx-auto my-10 p-6 rounded-3xl bg-black/50 backdrop-blur-xl shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
       <div className="text-center mb-6">
@@ -527,7 +529,7 @@ function AIChat() {
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`px-5 py-4 rounded-2xl text-sm max-w-[75%] md:max-w-[90%] break-words leading-relaxed ${msg.from === "user"
+            className={`px-5 py-4 rounded-2xl text-sm max-w-[75%] sm:max-w-[90%] break-words leading-relaxed ${msg.from === "user"
               ? "bg-blue-600/30 text-white self-end"
               : "bg-white/10 text-gray-200 self-start"
               }`}
