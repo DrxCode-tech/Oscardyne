@@ -67,9 +67,6 @@ export default function AssessmentPage() {
             <Link to="/" className="text-sm text-gray-300 hover:text-white">
               Home
             </Link>
-            <Link to="/services" className="text-sm text-gray-300 hover:text-white">
-              Services
-            </Link>
           </nav>
         </div>
       </header>

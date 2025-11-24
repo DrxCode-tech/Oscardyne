@@ -5,7 +5,7 @@ import fs from "fs";
 export const config = {
   api: {
     bodyParser: false, // disable default body parser
-  },
+  }
 };
 
 export default async function handler(req, res) {
