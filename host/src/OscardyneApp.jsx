@@ -335,38 +335,30 @@ function Careers() {
     setMessage("");
 
     try {
-      let fileURL = null;
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("email", form.email);
+      formData.append("phone", form.phone);
+      if (selectedFile && selectedFile.file) formData.append("file", selectedFile.file);
 
-      // Upload file if selected
-      if (selectedFile && selectedFile.file) {
-        const storageRef = ref(
-          storage,
-          `applications/${Date.now()}-${selectedFile.file.name}`
-        );
+      const response = await fetch("/api/career", { method: "POST", body: formData });
+      const result = await response.json().catch(() => ({}));
 
-        await uploadBytes(storageRef, selectedFile.file);
-        fileURL = await getDownloadURL(storageRef);
+      if (response.ok) {
+        setMessage("Application submitted successfully!");
+        setForm({ name: "", email: "", phone: "" });
+        setSelectedFile(null);
+      } else {
+        setMessage(result.message || "Something went wrong.");
       }
-
-      // Store data in Firestore
-      await addDoc(collection(db, "job_applications"), {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        fileURL: fileURL,
-        createdAt: Timestamp.now()
-      });
-
-      setMessage("Application submitted successfully!");
-      setForm({ name: "", email: "", phone: "" });
-      setSelectedFile(null);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       setMessage("Error submitting application.");
     } finally {
       setLoading(false);
     }
   };
+
 
 
   return (

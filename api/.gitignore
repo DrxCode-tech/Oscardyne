@@ -29,5 +29,7 @@ Thumbs.db
 *.tmp
 *.temp
 
+serviceAccountKey.json
+
 # VSCode settings
 .vscode/
