@@ -3,13 +3,17 @@ import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
 import fs from "fs";
 
+// Required for file uploads in Next.js 13+
+export const runtime = "nodejs";
+
 export const config = {
   api: {
-    bodyParser: false, // Disable Next.js body parser
+    bodyParser: false,
+    externalResolver: true,
   },
 };
 
-// Configure Cloudinary
+// Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -17,43 +21,53 @@ cloudinary.config({
 });
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json({ success: false, message: "Method not allowed" });
+  if (req.method !== "POST") {
+    return res.status(405).json({ success: false, message: "Method not allowed" });
+  }
 
-  const form = formidable({ multiples: false });
+  // Ensure tmp folder exists (required on Vercel)
+  const uploadDir = "/tmp/uploads";
+  fs.mkdirSync(uploadDir, { recursive: true });
+
+  const form = formidable({
+    multiples: false,
+    uploadDir,
+    keepExtensions: true,
+  });
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
-      console.error(err);
+      console.error("FORM ERROR:", err);
       return res.status(500).json({ success: false, message: "Form parse error" });
     }
 
-    try {
-      const { name, email, phone } = fields;
-      const file = files.file;
+    console.log("FILES:", files); // debug
+    console.log("FIELDS:", fields);
 
+    try {
+      const file = files.file;
       let fileUrl = null;
 
       if (file) {
-        // Upload file to Cloudinary
         const result = await cloudinary.uploader.upload(file.filepath, {
           folder: "applications",
-          resource_type: "auto", // supports images, pdf, doc, etc.
+          resource_type: "auto",
         });
+
         fileUrl = result.secure_url;
       }
 
-      // Store user data in Firestore
       const docRef = await db.collection("careerApplications").add({
-        name: name || "",
-        email: email || "",
-        phone: phone || "",
-        fileUrl: fileUrl || null,
+        name: fields.name || "",
+        email: fields.email || "",
+        phone: fields.phone || "",
+        fileUrl,
         submittedAt: new Date(),
       });
 
-      return res.status(200).json({ success: true, message: "Application submitted successfully!", id: docRef.id });
+      return res.status(200).json({ success: true, id: docRef.id });
     } catch (error) {
-      console.error(error);
+      console.error("UPLOAD ERROR:", error);
       return res.status(500).json({ success: false, message: "Failed to submit application." });
     }
   });
