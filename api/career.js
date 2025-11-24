@@ -1,11 +1,11 @@
 import nodemailer from "nodemailer";
-import multiparty from "multiparty"; // for parsing multipart/form-data
+import multiparty from "multiparty";
 import fs from "fs";
 
 export const config = {
   api: {
     bodyParser: false, // disable default body parser
-  }
+  },
 };
 
 export default async function handler(req, res) {
@@ -14,6 +14,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Wrap multiparty in a promise so we can await it
     const parseForm = () =>
       new Promise((resolve, reject) => {
         const form = new multiparty.Form();
@@ -30,14 +31,16 @@ export default async function handler(req, res) {
     const phone = fields.phone?.[0] || "";
     const file = files.file?.[0];
 
+    // Setup nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.EMAIL_PASS, // Gmail App Password
       },
     });
 
+    // Mail options
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: "marydanielima@gmail.com",
@@ -62,8 +65,9 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true, message: "Application submitted successfully!" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: error.message || "Failed to send application." });
+    console.error("Career API Error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: error.message || "Failed to send application." });
   }
 }
-
