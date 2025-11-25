@@ -478,7 +478,11 @@ function AIChat() {
       const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ txt: userMsg }),
+        body: JSON.stringify({
+          txt: userMsg,
+          history: messages, // send past chat
+        }),
+
       });
 
       const data = await res.json();
