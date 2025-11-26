@@ -4,7 +4,8 @@ import { Menu, X, Phone, Mail, MapPin, Send, Loader2, Home, Bot, PlayCircle, Shi
 import { useNavigate } from "react-router-dom";
 import { db, storage } from "./firebaseConfig";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaWhatsapp } from "react-icons/fa";
+
 
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
@@ -654,23 +655,23 @@ function Footer() {
 
             <div className="flex items-center gap-4">
               <a href="https://www.linkedin.com" target="_blank" className="hover:text-white text-gray-400">
-                <Linkedin size={20} />
+                <FaLinkedin size={20} />
               </a>
 
               <a href="https://wa.me/14034721928" target="_blank" className="hover:text-white text-gray-400">
-                <MessageCircle size={20} />
+                <FaWhatsapp size={20} />
               </a>
 
               <a href="https://facebook.com" target="_blank" className="hover:text-white text-gray-400">
-                <Facebook size={20} />
+                <FaFacebook size={20} />
               </a>
 
               <a href="https://instagram.com" target="_blank" className="hover:text-white text-gray-400">
-                <Instagram size={20} />
+                <FaInstagram size={20} />
               </a>
 
               <a href="https://youtube.com" target="_blank" className="hover:text-white text-gray-400">
-                <Youtube size={22} />
+                <FaYoutube size={22} />
               </a>
             </div>
           </div>
