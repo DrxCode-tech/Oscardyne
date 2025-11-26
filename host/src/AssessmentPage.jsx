@@ -39,13 +39,26 @@ export default function AssessmentPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For now we just log; later you will send `form` to your backend/AI.
-    console.log("FORM DATA:", form);
-    // show a simple UI response (replace with modal/toast later)
-    alert("Assessment request submitted. (Preview logged to console.)");
+
+    try {
+      const res = await fetch("/api/assessment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      // show AI result to the user
+      setAIResponse(data.aiReport);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    }
   };
+
 
   // Reusable input classes that blend with the dark glassy UI
   const inputClass =
@@ -316,6 +329,14 @@ export default function AssessmentPage() {
           Generate My Security Assessment
         </motion.button>
       </form>
+
+      {aiResponse && (
+        <div className="mt-10 p-5 bg-black/40 rounded-xl border border-white/10">
+          <h3 className="text-xl font-bold mb-4">Your Personalised Security Assessment</h3>
+          <p className="text-gray-200 whitespace-pre-wrap">{aiResponse}</p>
+        </div>
+      )}
+
     </div>
   );
 }
