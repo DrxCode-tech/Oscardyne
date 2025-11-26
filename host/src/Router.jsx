@@ -7,7 +7,7 @@ import InformationSecurity from './InformationSecurity';
 import ResidentialSecurity from './ResidentialSecurity';
 import CommercialSecurity from './CommercialSecurity';
 import AssessmentPage from './AssessmentPage';
-
+import CareerDashboard from './Pages';
 
 export default function App(){
     return (
@@ -22,6 +22,7 @@ export default function App(){
                     <Route path='/residential-security' element={<ResidentialSecurity />} />
                     <Route path='/commercial-security' element={<CommercialSecurity />} />
                     <Route path='/assessment' element={<AssessmentPage />} />
+                    <Route path='/jobs' element={<CareerDashboard />} />
                 </Routes>
             </main>
         </Router>
