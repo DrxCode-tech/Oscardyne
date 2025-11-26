@@ -3,7 +3,9 @@
     {
       "src": "host/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "host/dist" }
+      "config": {
+        "distDir": "host/dist"
+      }
     },
     {
       "src": "api/**/*.js",
