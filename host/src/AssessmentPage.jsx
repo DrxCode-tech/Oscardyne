@@ -28,6 +28,7 @@ export default function AssessmentPage() {
     timeline: "Immediately",
     notes: "",
   });
+  const [loading, setLoading] = useState(false);
   const [aiResponse, setAIResponse] = useState("");
 
   const update = (field, value) => {
@@ -45,6 +46,7 @@ export default function AssessmentPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await fetch("/api/assessment", {
@@ -57,9 +59,11 @@ export default function AssessmentPage() {
 
       // show AI result to the user
       setAIResponse(data.aiReport);
+      setLoading(false);
     } catch (err) {
       console.error(err);
       alert("Something went wrong");
+      setLoading(false);
     }
   };
 
@@ -330,7 +334,7 @@ export default function AssessmentPage() {
           type="submit"
           className="mx-auto px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-yellow-400 text-black font-bold text-lg shadow-lg"
         >
-          Generate My Security Assessment
+          {loading ? "Generating..." : "Generate My Security Assessment"}
         </motion.button>
       </form>
 
