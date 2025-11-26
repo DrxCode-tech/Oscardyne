@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, Mail, MapPin, Send, Loader2, Home, Bot, PlayCircle, ShieldCheck } from "lucide-react";
+import { Menu, X, Phone, Mail, MapPin, Send, Loader2, Home, Bot, PlayCircle, ShieldCheck,MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { db, storage } from "./firebaseConfig";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
@@ -608,8 +608,6 @@ function AIChat() {
 }
 
 // ------------------ Footer ------------------
-import { Facebook, Instagram, Linkedin, Youtube, Phone, MessageCircle } from "lucide-react";
-
 function Footer() {
   return (
     <footer className="py-10 mt-12 border-t border-white/10 bg-black/90">
